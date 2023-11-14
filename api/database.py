@@ -14,9 +14,9 @@ Base: DeclarativeMeta = declarative_base()
 engine = create_async_engine(DATABASE_URL)
 async_session_maker = sessionmaker(bind=engine, class_=AsyncSession,  expire_on_commit=False)
 
-# DATABASE_LOCAL = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-# local_engine = create_engine(DATABASE_LOCAL)
-# SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=local_engine)
+DATABASE_LOCAL = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+local_engine = create_engine(DATABASE_LOCAL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=local_engine)
 
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:

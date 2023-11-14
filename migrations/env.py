@@ -5,6 +5,11 @@ from sqlalchemy import pool
 
 from alembic import context
 
+import os
+import sys
+
+sys.path.append(os.path.join(sys.path[0], 'api'))
+
 from api.models import metadata
 from api.config import DB_HOST, DB_PASS, DB_PORT, DB_NAME, DB_USER
 

@@ -23,3 +23,4 @@ services:
     container_name: fastapi_app
     ports:
       - 9999:8000
+

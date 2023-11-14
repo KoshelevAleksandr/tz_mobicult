@@ -3,14 +3,14 @@ from typing import List
 from datetime import date
 
 
-class Currency(BaseModel):
-    valute: str
-    value: float
-
-
 class Rate(BaseModel):
-    date: date
-    name: str
-    currency: List[Currency]
+    id: int
+    currency: str
+    today: float
+    yesterday: float
+    before_yesterday: float
+
+    # class Config:
+    #     orm_mode = True
 
 
