@@ -1,7 +1,11 @@
-from fastapi import APIRouter, Depends
+from typing import List, Union
+
+from fastapi import APIRouter, Depends, Query, HTTPException
+from pydantic import BaseModel
 from sqlalchemy import select, update, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from schemas import TodayRate, Rate, Yesterday, BeforeYesterday
 # from tasks import get_celery_rate
 from operations import get_currency_rate_today, get_currency_rate_yesterday, get_currency_rate_before_yesterday
 from models import rate
@@ -50,8 +54,3 @@ async def get_rate(session: AsyncSession = Depends(get_async_session)):
     await session.execute(stmt_eur)
     await session.commit()
     return {"status": "success"}
-
-
-# @router.get('/celery_task')
-# def celery():
-#     get_celery_rate()

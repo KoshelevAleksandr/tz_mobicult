@@ -4,13 +4,14 @@ from fastapi import Depends
 from sqlalchemy import select, update, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from config import REDIS_HOST, REDIS_PORT
 from operations import get_currency_rate_today, get_currency_rate_yesterday, get_currency_rate_before_yesterday, \
     init_currency_rate
 from database import get_async_session, SessionLocal
 
 from models import rate
 
-celery_app = Celery('tasks', broker='redis://localhost:6379')
+celery_app = Celery('tasks', broker=f"redis://{REDIS_HOST}:{REDIS_PORT}")
 
 celery_app.conf.timezone = 'Europe/Moscow'
 

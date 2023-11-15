@@ -3,9 +3,9 @@ services:
   db:
     image: postgres:15
     container_name: db_app
-    command: -p 5435
+    command: -p 5432
     expose:
-      - 5435
+      - 5432
     env_file:
       - .env-non-dev
 
@@ -21,6 +21,15 @@ services:
     env_file:
       - .env-non-dev
     container_name: fastapi_app
+    command: ["fastapi_app/docker/app.sh"]
     ports:
       - 9999:8000
+    depends_on:
+      - db
+      - redis
+
+  celery:
+    build:
+      context: .
+
 
