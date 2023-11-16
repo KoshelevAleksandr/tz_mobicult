@@ -26,8 +26,9 @@ class BeforeYesterday(BaseModel):
     currency: str
     before_yesterday: float
 
-# class GetCurrencyRate(BaseModel):
-#     id: int
-#     currency: str
-#     currency_value: float
-#     day: str
+
+class GetCurrencyRate(BaseModel):
+    id: int
+    currency: str
+    currency_value: float
+    day: str

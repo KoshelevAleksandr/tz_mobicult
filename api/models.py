@@ -1,7 +1,6 @@
-from sqlalchemy import Column, Integer, Table, String, MetaData, Float
-from sqlalchemy.orm import Mapped, declarative_base
+from sqlalchemy import Column, Integer, Table, String, Float
 
-metadata = MetaData()
+from database import metadata
 
 rate = Table(
     "rate",
@@ -13,7 +12,7 @@ rate = Table(
     Column("before_yesterday", Float, nullable=False),
 )
 
-# Base = declarative_base()
+#
 #
 #
 # class CurrencyRate(Base):
