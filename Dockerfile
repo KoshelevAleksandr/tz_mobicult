@@ -14,9 +14,9 @@ WORKDIR /fastapi_app/docker
 
 RUN chmod a+x ./app.sh
 
-#RUN chmod a+x ./celery.sh
-
-
 #WORKDIR /fastapi_app/api
 #
+#CMD uvicorn main:app --host 0.0.0.0 --port 8000
+
+
 #CMD gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind=0.0.0.0:8000
