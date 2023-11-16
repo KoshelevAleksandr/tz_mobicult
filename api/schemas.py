@@ -1,6 +1,4 @@
-from pydantic import BaseModel, Field
-from typing import List
-from datetime import date
+from pydantic import BaseModel
 
 
 class Rate(BaseModel):
@@ -28,7 +26,8 @@ class BeforeYesterday(BaseModel):
     currency: str
     before_yesterday: float
 
-    # class Config:
-    #     orm_mode = True
-
-
+# class GetCurrencyRate(BaseModel):
+#     id: int
+#     currency: str
+#     currency_value: float
+#     day: str

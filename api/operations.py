@@ -2,11 +2,8 @@ import requests
 
 from datetime import date
 
-from fastapi import Depends
-from sqlalchemy import update, insert, select
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import update, insert
 
-from database import get_async_session
 from models import rate
 
 
@@ -35,44 +32,44 @@ def get_currency_rate_before_yesterday():
     return rate_dict
 
 
-# def init_currency_rate(session):
-#     today = get_currency_rate_today()
-#     yesterday_rate = get_currency_rate_yesterday()
-#     before_yesterday_rate = get_currency_rate_before_yesterday()
-#     stmt_usd = insert(rate).values(
-#         currency='USD',
-#         today=today['USD'],
-#         yesterday=yesterday_rate['USD'],
-#         before_yesterday=before_yesterday_rate['USD'])
-#     stmt_eur = insert(rate).values(
-#         currency='EUR',
-#         today=today['EUR'],
-#         yesterday=yesterday_rate['EUR'],
-#         before_yesterday=before_yesterday_rate['EUR'])
-#     session.execute(stmt_usd)
-#     session.execute(stmt_eur)
-#     session.commit()
-#     return {"status": "success"}
-#
-#
-# def startup_update_currency_rate(session):
-#     today = get_currency_rate_today()
-#     yesterday_rate = get_currency_rate_yesterday()
-#     before_yesterday_rate = get_currency_rate_before_yesterday()
-#     stmt_usd = update(rate).values(
-#         currency='USD',
-#         today=today['USD'],
-#         yesterday=yesterday_rate['USD'],
-#         before_yesterday=before_yesterday_rate['USD']).where(rate.c.currency == 'USD')
-#     stmt_eur = update(rate).values(
-#         currency='EUR',
-#         today=today['EUR'],
-#         yesterday=yesterday_rate['EUR'],
-#         before_yesterday=before_yesterday_rate['EUR']).where(rate.c.currency == 'EUR')
-#     session.execute(stmt_usd)
-#     session.execute(stmt_eur)
-#     session.commit()
-#     return {"status": "success"}
+def init_currency_rate(session):
+    today = get_currency_rate_today()
+    yesterday_rate = get_currency_rate_yesterday()
+    before_yesterday_rate = get_currency_rate_before_yesterday()
+    stmt_usd = insert(rate).values(
+        currency='USD',
+        today=today['USD'],
+        yesterday=yesterday_rate['USD'],
+        before_yesterday=before_yesterday_rate['USD'])
+    stmt_eur = insert(rate).values(
+        currency='EUR',
+        today=today['EUR'],
+        yesterday=yesterday_rate['EUR'],
+        before_yesterday=before_yesterday_rate['EUR'])
+    session.execute(stmt_usd)
+    session.execute(stmt_eur)
+    session.commit()
+    return {"status": "success"}
+
+
+def startup_update_currency_rate(session):
+    today = get_currency_rate_today()
+    yesterday_rate = get_currency_rate_yesterday()
+    before_yesterday_rate = get_currency_rate_before_yesterday()
+    stmt_usd = update(rate).values(
+        currency='USD',
+        today=today['USD'],
+        yesterday=yesterday_rate['USD'],
+        before_yesterday=before_yesterday_rate['USD']).where(rate.c.currency == 'USD')
+    stmt_eur = update(rate).values(
+        currency='EUR',
+        today=today['EUR'],
+        yesterday=yesterday_rate['EUR'],
+        before_yesterday=before_yesterday_rate['EUR']).where(rate.c.currency == 'EUR')
+    session.execute(stmt_usd)
+    session.execute(stmt_eur)
+    session.commit()
+    return {"status": "success"}
 
 
 

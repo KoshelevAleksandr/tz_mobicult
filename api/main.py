@@ -1,19 +1,15 @@
-import asyncio
 from typing import List, Union
 
-from fastapi import FastAPI, Request, Depends, HTTPException
-from fastapi.templating import Jinja2Templates
-from fastapi_cache import FastAPICache
-from fastapi_cache.backends.redis import RedisBackend
-from fastapi_cache.decorator import cache
+from fastapi import FastAPI, Depends, HTTPException
 
-from redis import asyncio as aioredis
-from datetime import datetime
 
-from sqlalchemy import select
+from fastapi_utils.tasks import repeat_every
+
+from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database import get_async_session
+from operations import startup_update_currency_rate, init_currency_rate
+from database import get_async_session, Session
 from models import rate
 from schemas import TodayRate, Yesterday, BeforeYesterday, Rate
 from config import REDIS_HOST, REDIS_PORT
@@ -25,9 +21,6 @@ app = FastAPI(
 )
 
 
-templates = Jinja2Templates(directory="templates")
-
-
 app.include_router(test_router)
 
 
@@ -35,6 +28,7 @@ app.include_router(test_router)
 async def get_currency_rate(day: str = 'today', session: AsyncSession = Depends(get_async_session)):
     query = select(rate)
     result = (await session.execute(query)).all()
+
     try:
         if isinstance(day, str) and day == 'today':
             return [TodayRate(id=el[0], currency=el[1], today=el[2]) for el in result]
@@ -52,14 +46,37 @@ async def get_currency_rate(day: str = 'today', session: AsyncSession = Depends(
         })
 
 
+@app.delete('/delete_all')
+async def delete_all_rates(session: AsyncSession = Depends(get_async_session)):
+    stmt = delete(rate)
+    await session.execute(stmt)
+    await session.commit()
+    return {"status": "delete"}
+
+
+
+
+
 # @app.get("/")
 # def get_base_page(request: Request):
 #     return templates.TemplateResponse("base.html", {"request": request})
 
 
 @app.on_event("startup")
-async def startup():
-    redis = aioredis.from_url(f"redis://{REDIS_HOST}:{REDIS_PORT}", encoding="utf8", decode_responses=True)
-    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+@repeat_every(seconds=10)
+def startup():
+    print('Hello')
+    with Session() as db:
+        query = (db.execute(select(rate))).all()
+        print(query)
+        if not query:
+            init_currency_rate(db)
+        else:
+            startup_update_currency_rate(db)
+
+
+
+    # redis = aioredis.from_url(f"redis://{REDIS_HOST}:{REDIS_PORT}", encoding="utf8", decode_responses=True)
+    # FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
 
 
