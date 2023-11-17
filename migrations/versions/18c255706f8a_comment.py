@@ -1,8 +1,8 @@
-"""create table CurrencyRate
+"""comment
 
-Revision ID: b9413961759e
+Revision ID: 18c255706f8a
 Revises: 
-Create Date: 2023-11-15 23:24:26.724314
+Create Date: 2023-11-17 12:05:35.216987
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'b9413961759e'
+revision: str = '18c255706f8a'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -24,7 +24,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('currency', sa.String(), nullable=False),
     sa.Column('today', sa.Float(), nullable=False),
-    sa.Column('yesterday', sa.Float(), nullable=False),
+    sa.Column('yesterda', sa.Float(), nullable=False),
     sa.Column('before_yesterday', sa.Float(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )

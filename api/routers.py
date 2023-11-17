@@ -6,28 +6,14 @@ from operations import request_currency_rate_today, request_currency_rate_yester
 from models import rate
 from database import get_async_session
 
-router = APIRouter(prefix='/rate/actions', tags=['Test'])
+router = APIRouter(prefix='/actions', tags=['Test'])
 
 
 @router.get('/rates')
 async def get_rates(session: AsyncSession = Depends(get_async_session)):
-    today = request_currency_rate_today()
-    yesterday_rate = request_currency_rate_yesterday()
-    before_yesterday_rate = request_currency_rate_before_yesterday()
-    stmt_usd = insert(rate).values(
-        currency='USD',
-        today=today['USD'],
-        yesterday=yesterday_rate['USD'],
-        before_yesterday=before_yesterday_rate['USD'])
-    stmt_eur = insert(rate).values(
-        currency='EUR',
-        today=today['EUR'],
-        yesterday=yesterday_rate['EUR'],
-        before_yesterday=before_yesterday_rate['EUR'])
-    await session.execute(stmt_usd)
-    await session.execute(stmt_eur)
-    await session.commit()
-    return {"status": "success"}
+    query = select(rate)
+    rates = await session.execute(query)
+    return rates.all()
 
 
 @router.post('/rates')
@@ -51,6 +37,7 @@ async def init_rates(session: AsyncSession = Depends(get_async_session)):
         await session.execute(stmt_eur)
         await session.commit()
         return {"status": "success"}
+    return {"status": "error"}
 
 
 @router.put('/rates')
