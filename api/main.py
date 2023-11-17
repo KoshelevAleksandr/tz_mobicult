@@ -50,4 +50,3 @@ def startup():
             init_currency_rate(db)
         else:
             startup_update_currency_rate(db)
-

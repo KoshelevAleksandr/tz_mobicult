@@ -39,9 +39,6 @@ def request_currency_rate_before_yesterday():
 async def get_today_rate(day: str, session: AsyncSession = Depends(get_async_session)):
     query = select(rate.c.currency, rate.c.today)
     rates = (await session.execute(query)).all()
-    # keys = ['id', 'currency', 'currency_value']
-    # dicts_rates = [dict(zip(keys, el)) for el in rates]
-    # result = [dict(item, day=day) for item in dicts_rates]
     result = [GetCurrencyRate(currency=item[1], currency_value=item[2], day=day) for item in rates]
     return result
 
@@ -49,9 +46,6 @@ async def get_today_rate(day: str, session: AsyncSession = Depends(get_async_ses
 async def get_yesterday_rate(day: str, session: AsyncSession = Depends(get_async_session)):
     query = select(rate.c.currency, rate.c.yesterday)
     rates = (await session.execute(query)).all()
-    # keys = ['id', 'currency', 'currency_value']
-    # dicts_rates = [dict(zip(keys, el)) for el in rates]
-    # result = [dict(item, day=day) for item in dicts_rates]
     result = [GetCurrencyRate(currency=item[1], currency_value=item[2], day=day) for item in rates]
     return result
 
@@ -59,9 +53,6 @@ async def get_yesterday_rate(day: str, session: AsyncSession = Depends(get_async
 async def get_before_yesterday(day: str, session: AsyncSession = Depends(get_async_session)):
     query = select(rate.c.currency, rate.c.before_yesterday)
     rates = (await session.execute(query)).all()
-    # keys = ['id', 'currency', 'currency_value']
-    # dicts_rates = [dict(zip(keys, el)) for el in rates]
-    # result = [dict(item, day=day) for item in dicts_rates]
     result = [GetCurrencyRate(currency=item[1], currency_value=item[2], day=day) for item in rates]
     return result
 
@@ -104,7 +95,3 @@ def startup_update_currency_rate(session):
     session.execute(stmt_eur)
     session.commit()
     return {"status": "success"}
-
-
-
-

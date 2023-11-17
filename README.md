@@ -1,10 +1,9 @@
 # tz_mobicult
 tz_mobicult
 
-- Для создания alembic.ini: ```alembic init migrations```
+Команда для запуска приложения:
+``- docker-compose up --build``
 
-- Создание миграции: ```alembic revision --autogenerate -m "comment"```
-- Применить миграции: ```alembic upgrade heads```
 
 
 Написать веб-приложение заходя на главную страницу которого пользователь видит
